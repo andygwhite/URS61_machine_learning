@@ -13,6 +13,7 @@ inputs, targets = process.datatoArr()
 
 lr_model = lr.linearRegression(inputs, targets)
 lr_model.trainModel()
+lr_model.saveModel()
 model = lr_model.getModel()
 
 process.writetoCSV(model)

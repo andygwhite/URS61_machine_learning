@@ -5,8 +5,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from numpy import genfromtxt
 
-class linearRegression:
+class linearRegression(nn.Module):
     def __init__(self, input_arr, target_arr):
+        super(linearRegression, self).__init__()
         self.inputs = torch.from_numpy(input_arr)
         self.targets = torch.from_numpy(target_arr)
         self.model = nn.Linear(np.shape(self.inputs)[1], np.shape(self.targets)[1])
@@ -65,3 +66,6 @@ class linearRegression:
 
     def getModel(self):
         return self.model
+
+    def saveModel(self, path='./model.pt'):
+        torch.save(self.model.state_dict(), path)
