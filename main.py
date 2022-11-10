@@ -8,7 +8,7 @@ import linearregression as lr
 import csvprocessing as csv
 from numpy import genfromtxt
 
-process = csv.csvProcessor("data1shuffled.csv")
+process = csv.csvProcessor("all.csv")
 inputs, targets = process.datatoArr()
 
 lr_model = lr.linearRegression(inputs, targets)

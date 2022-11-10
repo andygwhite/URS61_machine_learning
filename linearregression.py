@@ -4,11 +4,14 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from numpy import genfromtxt
+from torchmetrics import ConfusionMatrix
 
 class linearRegression(nn.Module):
     def __init__(self, input_arr, target_arr):
         super(linearRegression, self).__init__()
+        input_arr = input_arr / input_arr.max(axis=0)
         self.inputs = torch.from_numpy(input_arr)
+        print(self.inputs)
         self.targets = torch.from_numpy(target_arr)
         self.model = nn.Linear(np.shape(self.inputs)[1], np.shape(self.targets)[1])
 
@@ -40,7 +43,7 @@ class linearRegression(nn.Module):
         train_ds = TensorDataset(self.inputs, self.targets)
         train_ds[0:3]
         # Define data loader. Allows us to split data into batches and access rows from our inputs/targets as tuples
-        batch_size = 10
+        batch_size = 64
         train_dl = DataLoader(train_ds, batch_size, shuffle=True)
         next(iter(train_dl))
 
@@ -48,24 +51,27 @@ class linearRegression(nn.Module):
         print(self.model.bias)
 
         # Define optimizer
-        opt = torch.optim.SGD(self.model.parameters(), lr=0.5e-6)
+        opt = torch.optim.SGD(self.model.parameters(), lr=5e-2)
         # Define loss function
         loss_fn = F.mse_loss
         loss = loss_fn(self.model(self.inputs), self.targets)
         print(loss)
 
-        # Train the model for 100 epochs
-        self.__fit(train_dl, 30000, self.model, loss_fn, opt)
+        # Train the model for 1000 epochs
+        self.__fit(train_dl, 100, self.model, loss_fn, opt)
 
         # Generate predictions
         preds = self.model(self.inputs)
         print(preds)
         # Compare with targets
-        print(self.targets)
+        print(self.targets.int())
+        confmat = ConfusionMatrix(3)
+        print(confmat(preds, self.targets.int().contiguous()))
+
 
 
     def getModel(self):
         return self.model
 
     def saveModel(self, path='./model.pt'):
-        torch.save(self.model.state_dict(), path)
+        torch.save(self.model, path)
