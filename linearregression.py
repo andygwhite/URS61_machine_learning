@@ -5,14 +5,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 import pandas as pd
 from numpy import genfromtxt
-from torchmetrics import ConfusionMatrix
+# from torchmetrics import ConfusionMatrix
 
 class linearRegression(nn.Module):
     def __init__(self, input_arr, target_arr):
         super(linearRegression, self).__init__()
         # Format inputs
         # Use One Hot Encoding
-        input_arr = (pd.get_dummies(pd.DataFrame(input_arr), columns=[0,1,2,3,5]))
+        input_arr = (pd.get_dummies(pd.DataFrame(input_arr), columns=[0,1,2,5]))
         print(input_arr)
         input_arr = input_arr / input_arr.max(axis=0)
         self.inputs = torch.from_numpy(input_arr.values).float()
@@ -70,8 +70,8 @@ class linearRegression(nn.Module):
         print(preds)
         # Compare with targets
         print(self.targets.int())
-        confmat = ConfusionMatrix(3)
-        print(confmat(preds, self.targets.int().contiguous()))
+        # confmat = ConfusionMatrix(3)
+        # print(confmat(preds, self.targets.int().contiguous()))
 
 
 

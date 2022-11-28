@@ -14,7 +14,7 @@ class csvProcessor:
     def datatoArr(self):
         data = genfromtxt(self.filename, delimiter=',', skip_footer=0, encoding="utf-8-sig", dtype='float32')
         # data = data[0:10000, :]
-        data = np.array(random.sample(list(data),100000))
+        # data = np.array(random.sample(list(data),100000))
         inputs = data[:, [0, 1, 2, 3, 4, 5]]
         targets = data[:, [6, 7, 8]]
         return inputs, targets
